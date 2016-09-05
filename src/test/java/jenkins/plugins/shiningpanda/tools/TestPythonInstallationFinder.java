@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -23,14 +23,12 @@ package jenkins.plugins.shiningpanda.tools;
 
 import jenkins.plugins.shiningpanda.ShiningPandaTestCase;
 
-public class TestPythonInstallationFinder extends ShiningPandaTestCase
-{
+public class TestPythonInstallationFinder extends ShiningPandaTestCase {
 
-    public void testConfigure() throws Exception
-    {
-        assertTrue(PythonInstallation.isEmpty());
-        PythonInstallationFinder.configure();
-        assertFalse(PythonInstallation.isEmpty());
+    public void testConfigure() throws Exception {
+	assertTrue(PythonInstallation.isEmpty());
+	PythonInstallationFinder.configure();
+	assertFalse(PythonInstallation.isEmpty());
     }
 
 }

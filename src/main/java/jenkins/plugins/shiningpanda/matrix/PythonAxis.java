@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -21,22 +21,19 @@
  */
 package jenkins.plugins.shiningpanda.matrix;
 
+import java.util.Arrays;
+
+import org.kohsuke.stapler.DataBoundConstructor;
+
 import hudson.Extension;
 import hudson.Functions;
 import hudson.Util;
 import hudson.matrix.Axis;
 import hudson.matrix.AxisDescriptor;
-
-import java.util.Arrays;
-
 import jenkins.plugins.shiningpanda.Messages;
-import jenkins.plugins.shiningpanda.ShiningPanda;
 import jenkins.plugins.shiningpanda.tools.PythonInstallation;
 
-import org.kohsuke.stapler.DataBoundConstructor;
-
-public class PythonAxis extends Axis
-{
+public class PythonAxis extends Axis {
 
     /**
      * Configuration name for this axis
@@ -50,9 +47,8 @@ public class PythonAxis extends Axis
      *            Values for this axis
      */
     @DataBoundConstructor
-    public PythonAxis(String[] values)
-    {
-        super(KEY, Arrays.asList(values));
+    public PythonAxis(String[] values) {
+	super(KEY, Arrays.asList(values));
     }
 
     /**
@@ -60,112 +56,55 @@ public class PythonAxis extends Axis
      * 
      * @return The joined values
      */
-    public String getTreeValueString()
-    {
-        return Util.join(getValues(), "/");
+    public String getTreeValueString() {
+	return Util.join(getValues(), "/");
     }
 
     /**
      * Descriptor for this axis.
      */
     @Extension
-    public static class DescriptorImpl extends AxisDescriptor
-    {
+    public static class DescriptorImpl extends AxisDescriptor {
 
-        /**
-         * Let Jelly access the hosted flag.
-         */
-        public static boolean HOSTED = ShiningPanda.HOSTED;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hudson.model.Descriptor#getDisplayName()
+	 */
+	@Override
+	public String getDisplayName() {
+	    return Messages.PythonAxis_DisplayName();
+	}
 
-        /**
-         * Store a tree helper.
-         */
-        public static PythonAxisTree TREE = new PythonAxisTree();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hudson.model.Descriptor#getHelpFile()
+	 */
+	@Override
+	public String getHelpFile() {
+	    return Functions.getResourcePath() + "/plugin/shiningpanda/help/matrix/PythonAxis/help.html";
+	}
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see hudson.model.Descriptor#getDisplayName()
-         */
-        @Override
-        public String getDisplayName()
-        {
-            return Messages.PythonAxis_DisplayName();
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see hudson.matrix.AxisDescriptor#isInstantiable()
+	 */
+	@Override
+	public boolean isInstantiable() {
+	    // If there's no PYTHON configured, there's no point in this axis
+	    return !PythonInstallation.isEmpty();
+	}
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see hudson.model.Descriptor#getHelpFile()
-         */
-        @Override
-        public String getHelpFile()
-        {
-            return Functions.getResourcePath() + "/plugin/shiningpanda/help/matrix/PythonAxis/help.html";
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see hudson.matrix.AxisDescriptor#isInstantiable()
-         */
-        @Override
-        public boolean isInstantiable()
-        {
-            // If there's no PYTHON configured, there's no point in this axis
-            return !PythonInstallation.isEmpty();
-        }
-
-        /**
-         * Get the list of PYTHON installations.
-         * 
-         * @return The list of installations
-         */
-        public PythonInstallation[] getInstallations()
-        {
-            // Delegate
-            return PythonInstallation.list();
-        }
-
-        /**
-         * Escape strings
-         * 
-         * @param body
-         *            The body
-         * @param args
-         *            The arguments
-         * @return The escaped string
-         */
-        public String jsStringEscape(String body, Object... args)
-        {
-            return '\"' + Functions.jsStringEscape(String.format(body, args)) + '\"';
-        }
-
-        /**
-         * Escape strings
-         * 
-         * @param body
-         *            The body
-         * @return The escaped string
-         */
-        public String jsStringEscape(String body)
-        {
-            return jsStringEscape(body, new Object[] {});
-        }
-
-        /**
-         * Build the tree check box
-         * 
-         * @param installation
-         *            The PYTHON installation
-         * @return The HTML
-         */
-        public String buildCheckBox(PythonInstallation installation)
-        {
-            return jsStringEscape("<input type='checkbox' name='values' json='%s' ",
-                    Functions.htmlAttributeEscape(installation.getName()))
-                    + String.format("+has(%s)+", jsStringEscape(installation.getName()))
-                    + jsStringEscape("/><label class='attach-previous'>%s</label>", TREE.getVersion(installation));
-        }
+	/**
+	 * Get the list of PYTHON installations.
+	 * 
+	 * @return The list of installations
+	 */
+	public PythonInstallation[] getInstallations() {
+	    // Delegate
+	    return PythonInstallation.list();
+	}
     }
 }

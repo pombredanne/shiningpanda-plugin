@@ -1,6 +1,6 @@
 #!/bin/sh
 # ShiningPanda plug-in for Jenkins
-# Copyright (C) 2011-2013 ShiningPanda S.A.S.
+# Copyright (C) 2011-2015 ShiningPanda S.A.S.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -43,17 +43,11 @@ case $1 in
     run)
         mvn $OPTIONS clean hpi:run
         ;;
-    run-hosted)
-        mvn $OPTIONS clean hpi:run -Djenkins.plugins.shiningpanda.ShiningPanda.hosted=true
-        ;;
     debug)
         mvnDebug $OPTIONS clean hpi:run
         ;;
-    debug-hosted)
-        mvnDebug $OPTIONS clean hpi:run -Djenkins.plugins.shiningpanda.ShiningPanda.hosted=true
-        ;;
     release)
-        mvn $OPTIONS clean release:prepare release:perform -Dusername=omansion -Dpassword=$2
+        mvn $OPTIONS clean release:prepare release:perform -Darguments="-DskipTests"
         ;;
     help)
         echo "usage: sp <subcommand> [args]"
@@ -67,7 +61,7 @@ case $1 in
         echo "    run-hosted: execute clean hpi:run in hosted mode,"
         echo "    debug: execute clean hpi:run in debug mode,"
         echo "    debug-hosted: execute clean hpi:run in debug and hosted mode,"
-        echo "    release <github password>: release the plugin."
+        echo "    release: release the plugin."
         ;;
     *)
         echo "Invalid command: $1"

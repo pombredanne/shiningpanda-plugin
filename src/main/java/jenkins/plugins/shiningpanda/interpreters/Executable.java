@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -21,16 +21,14 @@
  */
 package jenkins.plugins.shiningpanda.interpreters;
 
-import hudson.FilePath;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import hudson.FilePath;
 import jenkins.plugins.shiningpanda.utils.FilePathUtil;
 
-public class Executable extends Python
-{
+public class Executable extends Python {
 
     /**
      * Constructor using fields.
@@ -40,9 +38,8 @@ public class Executable extends Python
      * @throws InterruptedException
      * @throws IOException
      */
-    protected Executable(FilePath home) throws IOException, InterruptedException
-    {
-        super(home);
+    protected Executable(FilePath home) throws IOException, InterruptedException {
+	super(home);
     }
 
     /*
@@ -51,9 +48,8 @@ public class Executable extends Python
      * @see jenkins.plugins.shiningpanda.interpreters.Python#isExecutable()
      */
     @Override
-    public Executable isExecutable()
-    {
-        return this;
+    public Executable isExecutable() {
+	return this;
     }
 
     /*
@@ -62,10 +58,9 @@ public class Executable extends Python
      * @see jenkins.plugins.shiningpanda.interpreters.Python#getExecutable()
      */
     @Override
-    public FilePath getExecutable() throws IOException, InterruptedException
-    {
-        // Check if the executable path exists
-        return FilePathUtil.isFileOrNull(getHome());
+    public FilePath getExecutable() throws IOException, InterruptedException {
+	// Check if the executable path exists
+	return FilePathUtil.isFileOrNull(getHome());
     }
 
     /*
@@ -75,17 +70,16 @@ public class Executable extends Python
      * jenkins.plugins.shiningpanda.interpreters.Python#getEnvironment(boolean)
      */
     @Override
-    public Map<String, String> getEnvironment(boolean includeHomeKey) throws IOException, InterruptedException
-    {
-        // Store the environment
-        Map<String, String> environment = new HashMap<String, String>();
-        // Get the path value
-        String value = getHome().getParent().getRemote();
-        // Check if on Windows
-        if (isWindows())
-            // Add the script folder on Windows
-            environment.put("PATH+", value + ";" + getHome().getParent().child("Scripts").getRemote());
-        // Return the environment
-        return environment;
+    public Map<String, String> getEnvironment(boolean includeHomeKey) throws IOException, InterruptedException {
+	// Store the environment
+	Map<String, String> environment = new HashMap<String, String>();
+	// Get the path value
+	String value = getHome().getParent().getRemote();
+	// Check if on Windows
+	if (isWindows())
+	    // Add the script folder on Windows
+	    environment.put("PATH+", value + ";" + getHome().getParent().child("Scripts").getRemote());
+	// Return the environment
+	return environment;
     }
 }

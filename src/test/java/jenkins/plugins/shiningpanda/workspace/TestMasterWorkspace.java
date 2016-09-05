@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -25,18 +25,15 @@ import java.io.File;
 
 import jenkins.plugins.shiningpanda.ShiningPandaTestCase;
 
-public class TestMasterWorkspace extends ShiningPandaTestCase
-{
+public class TestMasterWorkspace extends ShiningPandaTestCase {
 
-    public void testGetPackageDirNotExists() throws Exception
-    {
-        assertNull("master workspace should not have a package directory", getMasterWorkspace().getPackagesDir());
+    public void testGetPackageDirNotExists() throws Exception {
+	assertNull("master workspace should not have a package directory", getMasterWorkspace().getPackagesDir());
     }
 
-    public void testGetPackageDirExists() throws Exception
-    {
-        File packagesDir = createPackagesDir();
-        assertEquals("invalid package directory", packagesDir.getPath(), getWorkspace().getPackagesDir().getRemote());
+    public void testGetPackageDirExists() throws Exception {
+	File packagesDir = createPackagesDir();
+	assertEquals("invalid package directory", packagesDir.getPath(), getWorkspace().getPackagesDir().getRemote());
     }
 
 }

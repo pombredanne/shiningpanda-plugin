@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -23,16 +23,10 @@ package jenkins.plugins.shiningpanda;
 
 import hudson.Main;
 import hudson.Plugin;
-import jenkins.plugins.shiningpanda.tools.PythonInstallationFinder;
 import jenkins.plugins.shiningpanda.tools.PythonInstallation;
+import jenkins.plugins.shiningpanda.tools.PythonInstallationFinder;
 
-public class ShiningPanda extends Plugin
-{
-
-    /**
-     * Is JENKINS hosted on shiningpanda.com?
-     */
-    public static boolean HOSTED = Boolean.getBoolean(ShiningPanda.class.getName() + ".hosted");
+public class ShiningPanda extends Plugin {
 
     /*
      * (non-Javadoc)
@@ -40,10 +34,9 @@ public class ShiningPanda extends Plugin
      * @see hudson.Plugin#start()
      */
     @Override
-    public void start() throws Exception
-    {
-        // Enable backward compatibility
-        Compatibility.enable();
+    public void start() throws Exception {
+	// Enable backward compatibility
+	Compatibility.enable();
     }
 
     /*
@@ -52,12 +45,11 @@ public class ShiningPanda extends Plugin
      * @see hudson.Plugin#postInitialize()
      */
     @Override
-    public void postInitialize() throws Exception
-    {
-        // Check if some installations are not already set or if this is not in
-        // test context
-        if (PythonInstallation.isEmpty() && !Main.isUnitTest)
-            // Look for installations and configure them
-            PythonInstallationFinder.configure();
+    public void postInitialize() throws Exception {
+	// Check if some installations are not already set or if this is not in
+	// test context
+	if (PythonInstallation.isEmpty() && !Main.isUnitTest)
+	    // Look for installations and configure them
+	    PythonInstallationFinder.configure();
     }
 }

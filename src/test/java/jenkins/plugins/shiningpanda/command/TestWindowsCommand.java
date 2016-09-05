@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -23,20 +23,17 @@ package jenkins.plugins.shiningpanda.command;
 
 import junit.framework.TestCase;
 
-public class TestWindowsCommand extends TestCase
-{
+public class TestWindowsCommand extends TestCase {
 
-    public void testConvertCommand() throws Exception
-    {
-        WindowsCommand command = new WindowsCommand("Hello ${Who} and $Who!\nls toto/tutu", true, true);
-        assertEquals("Hello %Who% and %Who%!\nls toto\\tutu\r\nexit %ERRORLEVEL%", command.getContents());
+    public void testConvertCommand() throws Exception {
+	WindowsCommand command = new WindowsCommand("Hello ${Who} and $Who!\nls toto/tutu", true, true);
+	assertEquals("Hello %Who% and %Who%!\nls toto\\tutu\r\nexit %ERRORLEVEL%", command.getContents());
     }
 
-    public void testDoNotConvertCommand() throws Exception
-    {
-        String contents = "Hello ${Who} and $Who2!\nls toto/tutu";
-        WindowsCommand command = new WindowsCommand(contents, true, false);
-        assertEquals(contents + "\r\nexit %ERRORLEVEL%", command.getContents());
+    public void testDoNotConvertCommand() throws Exception {
+	String contents = "Hello ${Who} and $Who2!\nls toto/tutu";
+	WindowsCommand command = new WindowsCommand(contents, true, false);
+	assertEquals(contents + "\r\nexit %ERRORLEVEL%", command.getContents());
     }
 
 }

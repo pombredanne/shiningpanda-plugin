@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -21,14 +21,12 @@
  */
 package jenkins.plugins.shiningpanda.workspace;
 
-import hudson.FilePath;
-
 import java.io.IOException;
 
+import hudson.FilePath;
 import jenkins.plugins.shiningpanda.utils.FilePathUtil;
 
-public class SlaveWorkspace extends Workspace
-{
+public class SlaveWorkspace extends Workspace {
 
     /**
      * Constructor using fields.
@@ -36,10 +34,9 @@ public class SlaveWorkspace extends Workspace
      * @param home
      *            The home folder of the workspace.
      */
-    public SlaveWorkspace(FilePath home)
-    {
-        // Call super
-        super(home);
+    public SlaveWorkspace(FilePath home) {
+	// Call super
+	super(home);
     }
 
     /*
@@ -48,9 +45,9 @@ public class SlaveWorkspace extends Workspace
      * @see jenkins.plugins.shiningpanda.workspace.Workspace#getPackagesDir()
      */
     @Override
-    public FilePath getPackagesDir() throws IOException, InterruptedException
-    {
-        return FilePathUtil.isDirectoryOrNull(FilePathUtil.synchronize(getMasterPackagesDir(), getHome().child(PACKAGES)));
+    public FilePath getPackagesDir() throws IOException, InterruptedException {
+	return FilePathUtil
+		.isDirectoryOrNull(FilePathUtil.synchronize(getMasterPackagesDir(), getHome().child(PACKAGES)));
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -22,13 +22,12 @@
 package jenkins.plugins.shiningpanda.listeners;
 
 import hudson.Extension;
-import hudson.model.WorkspaceListener;
 import hudson.model.AbstractProject;
+import hudson.model.WorkspaceListener;
 import jenkins.plugins.shiningpanda.workspace.Workspace;
 
 @Extension
-public class WipeOutListener extends WorkspaceListener
-{
+public class WipeOutListener extends WorkspaceListener {
 
     /*
      * (non-Javadoc)
@@ -37,9 +36,8 @@ public class WipeOutListener extends WorkspaceListener
      * hudson.model.WorkspaceListener#afterDelete(hudson.model.AbstractProject)
      */
     @Override
-    public void afterDelete(@SuppressWarnings("rawtypes") AbstractProject project)
-    {
-        // Delegate
-        Workspace.delete(project);
+    public void afterDelete(@SuppressWarnings("rawtypes") AbstractProject project) {
+	// Delegate
+	Workspace.delete(project);
     }
 }

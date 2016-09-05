@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -23,20 +23,17 @@ package jenkins.plugins.shiningpanda.utils;
 
 import junit.framework.TestCase;
 
-public class TestStringUtil extends TestCase
-{
+public class TestStringUtil extends TestCase {
 
-    public void testHasWhitespace() throws Exception
-    {
-        assertFalse("should not have whitespace", StringUtil.hasWhitespace(null));
-        assertTrue("should have whitespace", StringUtil.hasWhitespace("hello world"));
-        assertTrue("should have whitespace", StringUtil.hasWhitespace("hello\tworld"));
-        assertFalse("should not have whitespace", StringUtil.hasWhitespace("hello_world"));
+    public void testHasWhitespace() throws Exception {
+	assertFalse("should not have whitespace", StringUtil.hasWhitespace(null));
+	assertTrue("should have whitespace", StringUtil.hasWhitespace("hello world"));
+	assertTrue("should have whitespace", StringUtil.hasWhitespace("hello\tworld"));
+	assertFalse("should not have whitespace", StringUtil.hasWhitespace("hello_world"));
     }
 
-    public void testFixCrLf() throws Exception
-    {
-        assertEquals("\nabc\ndef\n", StringUtil.fixCrLf("\r\nabc\r\ndef\r\n"));
+    public void testFixCrLf() throws Exception {
+	assertEquals("\nabc\ndef\n", StringUtil.fixCrLf("\r\nabc\r\ndef\r\n"));
     }
 
 }

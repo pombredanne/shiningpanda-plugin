@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -23,17 +23,15 @@ package jenkins.plugins.shiningpanda.tools;
 
 import jenkins.plugins.shiningpanda.ShiningPandaTestCase;
 
-public class TestPythonInstallation extends ShiningPandaTestCase
-{
+public class TestPythonInstallation extends ShiningPandaTestCase {
 
-    public void testRoundTrip() throws Exception
-    {
-        PythonInstallation beforeInstallation = configureCPython2();
-        configRoundtrip();
-        PythonInstallation[] afterInstallations = getPythonInstallations();
-        assertEquals(1, afterInstallations.length);
-        PythonInstallation afterInstallation = afterInstallations[0];
-        assertEqualBeans(beforeInstallation, afterInstallation, "name,home");
+    public void testRoundTrip() throws Exception {
+	PythonInstallation beforeInstallation = configureCPython2();
+	configRoundtrip();
+	PythonInstallation[] afterInstallations = getPythonInstallations();
+	assertEquals(1, afterInstallations.length);
+	PythonInstallation afterInstallation = afterInstallations[0];
+	assertEqualBeans(beforeInstallation, afterInstallation, "name,home");
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -21,26 +21,24 @@
  */
 package jenkins.plugins.shiningpanda.workspace;
 
-import hudson.FilePath;
-import hudson.Util;
-import hudson.matrix.MatrixConfiguration;
-import hudson.matrix.MatrixProject;
-import hudson.model.Item;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.Node;
-import hudson.model.Project;
-import hudson.util.IOUtils;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import hudson.FilePath;
+import hudson.Util;
+import hudson.matrix.MatrixConfiguration;
+import hudson.matrix.MatrixProject;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.Item;
+import hudson.model.Node;
+import hudson.model.Project;
+import hudson.util.IOUtils;
 import jenkins.model.Jenkins;
 import jenkins.plugins.shiningpanda.utils.FilePathUtil;
 
-public abstract class Workspace
-{
+public abstract class Workspace {
 
     /**
      * Get a logger.
@@ -63,6 +61,26 @@ public abstract class Workspace
     protected static String VIRTUALENV = "virtualenv.py";
 
     /**
+     * Name of the SETUPTOOLS wheel.
+     */
+    protected static String SETUPTOOLS = "setuptools-0-py2.py3-none-any.whl";
+
+    /**
+     * Name of the PIP wheel.
+     */
+    protected static String PIP = "pip-0-py2.py3-none-any.whl";
+
+    /**
+     * Name of the WHEEL wheel.
+     */
+    protected static String WHEEL = "wheel-0-py2.py3-none-any.whl";
+
+    /**
+     * Name of the ARGPARSE wheel.
+     */
+    protected static String ARGPARSE = "argparse-0-py2.py3-none-any.whl";
+
+    /**
      * Name of the BUILDOUT bootstrap module.
      */
     protected static String BOOTSTRAP = "bootstrap.py";
@@ -78,12 +96,11 @@ public abstract class Workspace
      * @param home
      *            The home folder of the workspace.
      */
-    public Workspace(FilePath home)
-    {
-        // Call super
-        super();
-        // Store home folder
-        setHome(home);
+    public Workspace(FilePath home) {
+	// Call super
+	super();
+	// Store home folder
+	setHome(home);
     }
 
     /**
@@ -91,9 +108,8 @@ public abstract class Workspace
      * 
      * @return The home folder
      */
-    public FilePath getHome()
-    {
-        return home;
+    public FilePath getHome() {
+	return home;
     }
 
     /**
@@ -102,9 +118,8 @@ public abstract class Workspace
      * @param home
      *            The home folder
      */
-    private void setHome(FilePath home)
-    {
-        this.home = home;
+    private void setHome(FilePath home) {
+	this.home = home;
     }
 
     /**
@@ -113,9 +128,8 @@ public abstract class Workspace
      * @return The VIRTUALENV module content
      * @throws IOException
      */
-    public String getVirtualenvPyContent() throws IOException
-    {
-        return IOUtils.toString(getClass().getResourceAsStream(VIRTUALENV));
+    public String getVirtualenvPyContent() throws IOException {
+	return IOUtils.toString(getClass().getResourceAsStream(VIRTUALENV));
     }
 
     /**
@@ -125,9 +139,13 @@ public abstract class Workspace
      * @throws IOException
      * @throws InterruptedException
      */
-    public FilePath getVirtualenvPy() throws IOException, InterruptedException
-    {
-        return FilePathUtil.synchronize(getHome().child(VIRTUALENV), getVirtualenvPyContent());
+    public FilePath getVirtualenvPy() throws IOException, InterruptedException {
+	// TODO: optimize transfer of PIP, SETUPTOOLS, WHEEL and ARGPARSE
+	getHome().child(SETUPTOOLS).copyFrom(getClass().getResource(SETUPTOOLS));
+	getHome().child(PIP).copyFrom(getClass().getResource(PIP));
+	getHome().child(WHEEL).copyFrom(getClass().getResource(WHEEL));
+	getHome().child(ARGPARSE).copyFrom(getClass().getResource(ARGPARSE));
+	return FilePathUtil.synchronize(getHome().child(VIRTUALENV), getVirtualenvPyContent());
     }
 
     /**
@@ -136,9 +154,8 @@ public abstract class Workspace
      * @return The BUILDOUT bootstrap module content
      * @throws IOException
      */
-    public String getBootstrapPyContent() throws IOException
-    {
-        return IOUtils.toString(getClass().getResourceAsStream(BOOTSTRAP));
+    public String getBootstrapPyContent() throws IOException {
+	return IOUtils.toString(getClass().getResourceAsStream(BOOTSTRAP));
     }
 
     /**
@@ -148,9 +165,8 @@ public abstract class Workspace
      * @throws IOException
      * @throws InterruptedException
      */
-    public FilePath getBootstrapPy() throws IOException, InterruptedException
-    {
-        return FilePathUtil.synchronize(getHome().child(BOOTSTRAP), getBootstrapPyContent());
+    public FilePath getBootstrapPy() throws IOException, InterruptedException {
+	return FilePathUtil.synchronize(getHome().child(BOOTSTRAP), getBootstrapPyContent());
     }
 
     /**
@@ -161,9 +177,8 @@ public abstract class Workspace
      * @throws IOException
      * @throws InterruptedException
      */
-    public FilePath getMasterPackagesDir() throws IOException, InterruptedException
-    {
-        return FilePathUtil.isDirectoryOrNull(Jenkins.getInstance().getRootPath().child(BASENAME).child(PACKAGES));
+    public FilePath getMasterPackagesDir() throws IOException, InterruptedException {
+	return FilePathUtil.isDirectoryOrNull(Jenkins.getInstance().getRootPath().child(BASENAME).child(PACKAGES));
     }
 
     /**
@@ -182,9 +197,8 @@ public abstract class Workspace
      * 
      * @return The VIRTUALENV home
      */
-    public FilePath getToolsHome()
-    {
-        return getHome().child("tools");
+    public FilePath getToolsHome() {
+	return getHome().child("tools");
     }
 
     /**
@@ -194,9 +208,8 @@ public abstract class Workspace
      *            The name of the VIRTUALENV
      * @return The VIRTUALENV home
      */
-    public FilePath getVirtualenvHome(String name)
-    {
-        return getHome().child("virtualenvs").child(Util.getDigestOf(Util.fixNull(name)).substring(0, 8));
+    public FilePath getVirtualenvHome(String name) {
+	return getHome().child("virtualenvs").child(Util.getDigestOf(Util.fixNull(name)).substring(0, 8));
     }
 
     /**
@@ -207,27 +220,22 @@ public abstract class Workspace
      *            The name of the PYTHON installation
      * @return The VIRTUALENV home
      */
-    public FilePath getBuildoutHome(String name)
-    {
-        return getHome().child("buildouts").child(Util.getDigestOf(Util.fixNull(name)).substring(0, 8));
+    public FilePath getBuildoutHome(String name) {
+	return getHome().child("buildouts").child(Util.getDigestOf(Util.fixNull(name)).substring(0, 8));
     }
 
     /**
      * Delete this workspace without throwing exceptions on error.
      */
-    protected void delete()
-    {
-        // Get errors
-        try
-        {
-            // Delete recursively
-            getHome().deleteRecursive();
-        }
-        catch (Exception e)
-        {
-            // Log
-            LOGGER.log(Level.SEVERE, "Failed to delete workspace: " + getHome().getRemote(), e);
-        }
+    protected void delete() {
+	// Get errors
+	try {
+	    // Delete recursively
+	    getHome().deleteRecursive();
+	} catch (Exception e) {
+	    // Log
+	    LOGGER.log(Level.SEVERE, "Failed to delete workspace: " + getHome().getRemote(), e);
+	}
     }
 
     /**
@@ -237,9 +245,8 @@ public abstract class Workspace
      *            The home folder
      * @return The workspace
      */
-    public static Workspace fromHome(FilePath home)
-    {
-        return home.isRemote() ? new SlaveWorkspace(home) : new MasterWorkspace(home);
+    public static Workspace fromHome(FilePath home) {
+	return home.isRemote() ? new SlaveWorkspace(home) : new MasterWorkspace(home);
     }
 
     /**
@@ -249,9 +256,8 @@ public abstract class Workspace
      *            The build
      * @return The workspace
      */
-    public static Workspace fromBuild(AbstractBuild<?, ?> build)
-    {
-        return fromNode(build.getBuiltOn(), build.getProject(), null);
+    public static Workspace fromBuild(AbstractBuild<?, ?> build) {
+	return fromNode(build.getBuiltOn(), build.getProject(), null);
     }
 
     /**
@@ -264,9 +270,8 @@ public abstract class Workspace
      *            use the name of the project
      * @return The workspace if exists, else null
      */
-    public static Workspace fromProject(Project<?, ?> project, String name)
-    {
-        return fromNode(project.getLastBuiltOn(), project, name);
+    public static Workspace fromProject(Project<?, ?> project, String name) {
+	return fromNode(project.getLastBuiltOn(), project, name);
     }
 
     /**
@@ -281,25 +286,24 @@ public abstract class Workspace
      *            use the name of the project
      * @return The workspace
      */
-    public static Workspace fromNode(Node node, AbstractProject<?, ?> project, String name)
-    {
-        // Check if node exists
-        if (node == null)
-            // Unable to get the workspace
-            return null;
-        // Get the name of the project as identifier
-        String id;
-        // Check if this is the child of a matrix project
-        if (project instanceof MatrixConfiguration)
-            // Append the name of the parent project or the provided name if
-            // exists with the project name
-            id = (name != null ? name : ((MatrixConfiguration) project).getParent().getName()) + project.getName();
-        // This is a standard project
-        else
-            // Use the name of the project or the provided name if exists
-            id = name != null ? name : project.getName();
-        // Build the workspace from home
-        return fromHome(WorkspaceHomeProperty.get(node).child(Util.getDigestOf(id).substring(0, 8)));
+    public static Workspace fromNode(Node node, AbstractProject<?, ?> project, String name) {
+	// Check if node exists
+	if (node == null)
+	    // Unable to get the workspace
+	    return null;
+	// Get the name of the project as identifier
+	String id;
+	// Check if this is the child of a matrix project
+	if (project instanceof MatrixConfiguration)
+	    // Append the name of the parent project or the provided name if
+	    // exists with the project name
+	    id = (name != null ? name : ((MatrixConfiguration) project).getParent().getName()) + project.getName();
+	// This is a standard project
+	else
+	    // Use the name of the project or the provided name if exists
+	    id = name != null ? name : project.getName();
+	// Build the workspace from home
+	return fromHome(WorkspaceHomeProperty.get(node).child(Util.getDigestOf(id).substring(0, 8)));
     }
 
     /**
@@ -308,10 +312,9 @@ public abstract class Workspace
      * @param item
      *            The item
      */
-    public static void delete(Item item)
-    {
-        // Delegate
-        delete(item, null);
+    public static void delete(Item item) {
+	// Delegate
+	delete(item, null);
     }
 
     /**
@@ -322,30 +325,27 @@ public abstract class Workspace
      * @param name
      *            The name to use to compute the workspace location
      */
-    public static void delete(Item item, String name)
-    {
-        // Check if this is a matrix project
-        if (item instanceof MatrixProject)
-            // Go threw the configurations
-            for (MatrixConfiguration configuration : ((MatrixProject) item).getItems())
-            {
-                // Get workspace
-                Workspace workspace = fromProject(configuration, name);
-                // Check if exists
-                if (workspace != null)
-                    // Delete it
-                    workspace.delete();
-            }
-        // Check if this is a real project
-        else if (item instanceof Project)
-        {
-            // Get workspace
-            Workspace workspace = fromProject((Project<?, ?>) item, name);
-            // Check if exists
-            if (workspace != null)
-                // Delete it
-                workspace.delete();
-        }
+    public static void delete(Item item, String name) {
+	// Check if this is a matrix project
+	if (item instanceof MatrixProject)
+	    // Go threw the configurations
+	    for (MatrixConfiguration configuration : ((MatrixProject) item).getItems()) {
+		// Get workspace
+		Workspace workspace = fromProject(configuration, name);
+		// Check if exists
+		if (workspace != null)
+		    // Delete it
+		    workspace.delete();
+	    }
+	// Check if this is a real project
+	else if (item instanceof Project) {
+	    // Get workspace
+	    Workspace workspace = fromProject((Project<?, ?>) item, name);
+	    // Check if exists
+	    if (workspace != null)
+		// Delete it
+		workspace.delete();
+	}
     }
 
 }

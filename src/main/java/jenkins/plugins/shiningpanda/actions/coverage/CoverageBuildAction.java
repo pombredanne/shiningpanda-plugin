@@ -1,6 +1,6 @@
 /*
  * ShiningPanda plug-in for Jenkins
- * Copyright (C) 2011-2013 ShiningPanda S.A.S.
+ * Copyright (C) 2011-2015 ShiningPanda S.A.S.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of its license which incorporates the terms and 
@@ -21,19 +21,17 @@
  */
 package jenkins.plugins.shiningpanda.actions.coverage;
 
-import hudson.model.AbstractBuild;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import jenkins.plugins.shiningpanda.publishers.CoveragePublisher;
-
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-public class CoverageBuildAction extends CoverageAction
-{
+import hudson.model.AbstractBuild;
+import jenkins.plugins.shiningpanda.publishers.CoveragePublisher;
+
+public class CoverageBuildAction extends CoverageAction {
 
     /**
      * The build.
@@ -46,12 +44,11 @@ public class CoverageBuildAction extends CoverageAction
      * @param build
      *            The build
      */
-    public CoverageBuildAction(AbstractBuild<?, ?> build)
-    {
-        // Call super
-        super();
-        // Store the build
-        this.build = build;
+    public CoverageBuildAction(AbstractBuild<?, ?> build) {
+	// Call super
+	super();
+	// Store the build
+	this.build = build;
     }
 
     /*
@@ -59,10 +56,9 @@ public class CoverageBuildAction extends CoverageAction
      * 
      * @see jenkins.plugins.shiningpanda.actions.coverage.CoverageAction#show()
      */
-    protected boolean show()
-    {
-        // Delegate
-        return hasReports(CoveragePublisher.getHtmlDir(build));
+    protected boolean show() {
+	// Delegate
+	return hasReports(CoveragePublisher.getHtmlDir(build));
     }
 
     /**
@@ -75,9 +71,8 @@ public class CoverageBuildAction extends CoverageAction
      * @throws IOException
      * @throws ServletException
      */
-    public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException
-    {
-        // Delegate
-        serve(req, rsp, build.getFullDisplayName(), CoveragePublisher.getHtmlDir(build), getPath(req));
+    public void doDynamic(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
+	// Delegate
+	serve(req, rsp, build.getFullDisplayName(), CoveragePublisher.getHtmlDir(build), getPath(req));
     }
 }
